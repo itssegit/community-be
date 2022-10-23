@@ -7,5 +7,7 @@ import com.itsse.backend.entity.UserEntity;
 
 @Repository
 public interface UserRepository extends JpaRepository<UserEntity, String> {
-
+    //
+    UserEntity findByEmailAndPassword(String email, String password);
+    UserEntity findByEmail(String email);
 }

@@ -10,6 +10,7 @@ import javax.persistence.Table;
 
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.itsse.backend.dto.UserDto;
 
@@ -62,5 +63,14 @@ public class UserEntity {
 		this.phoneNo = dto.getPhoneNo();
 		this.password = dto.getPassword();
 	}
+	
+	public UserEntity(UserDto dto, PasswordEncoder passwordEncoder) {
+        this.email = dto.getEmail();
+        this.nickname = dto.getNickname();
+        this.username = dto.getUsername();
+        this.birthday = dto.getBirthday();
+        this.phoneNo = dto.getPhoneNo();
+        this.password = passwordEncoder.encode(dto.getPassword());
+    }
 	
 }
