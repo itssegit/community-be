@@ -10,15 +10,10 @@ import lombok.Setter;
 @Builder
 @AllArgsConstructor
 public class UserDto {
-	private String email;
-	private String nickname;
+	private String id;
+	private String role;
 	private String password;
-	private String phoneNo;
-	private String username;
-	private String birthday;
-	
-	private String token;
-	private Long id;
+	private String name;
 	
 	public UserDto() {
 		

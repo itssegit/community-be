@@ -1,8 +1,7 @@
 package com.itsse.backend.controller;
 
-import javax.servlet.http.HttpServletResponse;
-
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -14,8 +13,8 @@ import lombok.RequiredArgsConstructor;
 public class ArticleController {
     //
     @PostMapping("/register")
-    public void registerArticle(HttpServletResponse response) {
-        System.out.println(response);
+    public void registerArticle(@RequestBody String content) {
+        System.out.println(content);
         System.out.println("register article method in java");
     }
 }
