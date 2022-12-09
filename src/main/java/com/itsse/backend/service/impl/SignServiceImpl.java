@@ -68,6 +68,7 @@ public class SignServiceImpl implements SignService {
     public SignInResultDto signIn(String id, String password) throws RuntimeException {
         LOGGER.info("[getSignInResult] signDataHandler 로 회원 정보 요청");
         User user = userRepository.getByUid(id);
+        
         LOGGER.info("[getSignInResult] Id : {}", id);
 
         LOGGER.info("[getSignInResult] 패스워드 비교 수행");
@@ -75,11 +76,17 @@ public class SignServiceImpl implements SignService {
             throw new RuntimeException();
         }
         LOGGER.info("[getSignInResult] 패스워드 일치");
+        
+        // dto에 넘겨줄 user에서 password 정보 제거
+        if(user != null) {
+            user.setPassword(null);
+        }
 
         LOGGER.info("[getSignInResult] SignInResultDto 객체 생성");
         SignInResultDto signInResultDto = SignInResultDto.builder()
             .token(jwtTokenProvider.createToken(String.valueOf(user.getUid()),
                 user.getRoles()))
+            .user(user)
             .build();
 
         LOGGER.info("[getSignInResult] SignInResultDto 객체에 값 주입");

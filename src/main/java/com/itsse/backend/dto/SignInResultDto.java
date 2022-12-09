@@ -1,5 +1,7 @@
 package com.itsse.backend.dto;
 
+import com.itsse.backend.entity.User;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -14,9 +16,11 @@ import lombok.ToString;
 public class SignInResultDto extends SignUpResultDto {
     //
     private String token;
+    private User user;
     
-    public SignInResultDto(boolean success, int code, String msg) {
+    public SignInResultDto(boolean success, int code, String msg, User user) {
         super(success, code, msg);
         this.token = token;
+        this.user = user;
     }
 }

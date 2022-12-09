@@ -1,9 +1,14 @@
 package com.itsse.backend.controller;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.itsse.backend.dto.ArticleDto;
@@ -24,6 +29,14 @@ public class ArticleController {
     
     @Autowired
     private UserRepository userRepository;
+    
+    @GetMapping("/list")
+    public List<Article> getArticles(@RequestParam String author) {
+        User user = userRepository.getByUid(author);
+        
+        List<Article> lists = articleRepository.getArticlesByAuthor(user);
+        return lists;
+    }
     
     @PostMapping("/register")
     public void registerArticle(@RequestBody ArticleDto article) {

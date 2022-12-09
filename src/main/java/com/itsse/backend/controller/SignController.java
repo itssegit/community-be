@@ -9,6 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.itsse.backend.config.security.JwtTokenProvider;
 import com.itsse.backend.dto.SignInResultDto;
 import com.itsse.backend.dto.SignUpResultDto;
 import com.itsse.backend.dto.UserDto;
@@ -27,10 +31,25 @@ public class SignController {
     //
     private final Logger LOGGER = LoggerFactory.getLogger(SignController.class);
     private final SignService signService;
+    private final JwtTokenProvider jwtTokenProvider;
 
     @Autowired
-    public SignController(SignService signService) {
+    public SignController(JwtTokenProvider jwtTokenProvider, SignService signService) {
+        this.jwtTokenProvider = jwtTokenProvider;
         this.signService = signService;
+    }
+    
+    @PostMapping(value="/refreshTokenAndUser")
+    public Object refreshTokenAndUser(@RequestBody String token) {
+        //
+        LOGGER.info("[refreshTokenAndUser] token 값 유효성 체크 시작!");
+        if(token != null && jwtTokenProvider.validateToken(token)) {
+            Authentication authentication = jwtTokenProvider.getAuthentication(token);
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+            LOGGER.info("[refreshTokenAndUser] token 값 유효성 체크 완료");
+            return authentication.getPrincipal();
+        }
+        return null;
     }
 
     @PostMapping(value = "/sign-in")
